@@ -8,5 +8,13 @@
 	<PackAsTool>true</PackAsTool>
 	<ToolCommandName>cursan</ToolCommandName>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<AssemblyVersion>1.0.1.0</AssemblyVersion>
+	<FileVersion>1.0.1.0</FileVersion>
+	<Company>Cursan</Company>
+	<Product>Tools</Product>
+	<Version>1.0.1</Version>
   </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="YamlDotNet" Version="13.7.1" />
+	</ItemGroup>
 </Project>

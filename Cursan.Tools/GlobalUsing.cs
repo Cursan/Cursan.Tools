@@ -1,0 +1,10 @@
+﻿global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Text;
+global using System.Threading.Tasks;
+global using Cursan.Tools;
+global using Cursan.Tools.Infrastructure;
+global using Cursan.Tools.Cli;
+global using Cursan.Tools.Generators;
+global using System.Text.RegularExpressions;

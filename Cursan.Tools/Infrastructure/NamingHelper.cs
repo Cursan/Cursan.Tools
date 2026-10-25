@@ -1,7 +1,4 @@
-﻿using System.Text;
-using System.Text.RegularExpressions;
-
-namespace Cursan.Tools.Infrastructure;
+﻿namespace Cursan.Tools.Infrastructure;
 
 public static partial class NamingHelper
 {
