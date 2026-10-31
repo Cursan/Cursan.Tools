@@ -1,0 +1,143 @@
+version: 1
+
+# ─── Метаданные ──────────────────────────────────────────────
+metadata:
+  name: CustomerEditForm
+  namespace: Cursan.Samples.Customers
+  description: Форма редактирования клиента со всеми типами полей.
+  output: ./Generated
+  overwrite: true
+
+# ─── Настройки окна ─────────────────────────────────────────
+form:
+  type: Window                # Window | UserControl | Page
+  title: Редактирование клиента
+  width: "720"
+  height: "560"
+  minWidth: 640
+  minHeight: 480
+  startupLocation: CenterOwner
+  resizable: true
+  layout:
+    columns: ["Auto", "*"]
+    rowHeight: 30
+    margin: 16
+    spacing: 6
+    twoColumns: false
+
+# ─── ViewModel ──────────────────────────────────────────────
+viewModel:
+  generate: true
+  name: CustomerEditViewModel
+  namespace: Cursan.Samples.Customers.ViewModels
+  baseType: ObservableObject
+  toolkit: CommunityToolkit.Mvvm
+  commands:                   # имена должны совпадать с actions[].name
+    - Save
+    - Reset
+    - Cancel
+  services:
+    - name: CustomerService
+      type: ICustomerService
+      injectAs: customerService     # валидный C#-идентификатор
+    - name: DialogService
+      type: IDialogService
+      injectAs: dialogService
+
+# ─── Code-behind ────────────────────────────────────────────
+codeBehind:
+  generate: true
+  dataContext: viewModel      # viewModel | self | null
+
+# ─── Поля ───────────────────────────────────────────────────
+fields:
+  # TextBox + валидация + многострочность + span
+  - name: FullName
+    label: Полное имя
+    type: string
+    control: TextBox
+    required: true
+    default: ""
+    placeholder: "Иванов Иван Иванович"
+    maxLength: 200
+    multiline: false
+    validation:
+      pattern: '^[А-Яа-яЁёA-Za-z\s\-]+$'
+      message: "Только буквы, пробелы и дефис."
+    layout:
+      span: 2
+      row: 0
+
+  # NumericUpDown + min/max + default внутри диапазона
+  - name: Age
+    label: Возраст
+    type: int
+    control: NumericUpDown
+    required: true
+    min: 0
+    max: 120
+    default: 18
+    layout:
+      span: 1
+
+  # DatePicker + спец. значение default
+  - name: BirthDate
+    label: Дата рождения
+    type: DateTime
+    control: DatePicker
+    required: true
+    default: "today"          # today | now | конкретная дата
+    layout:
+      span: 1
+
+  # ComboBox + привязки для отображения/значения
+  - name: Country
+    label: Страна
+    type: string
+    control: ComboBox
+    required: true
+    itemsSource: Countries
+    displayMember: Name
+    valueMember: Code
+    default: RU
+    layout:
+      span: 2
+
+  # CheckBox
+  - name: IsActive
+    label: Активен
+    type: bool
+    control: CheckBox
+    default: true
+    layout:
+      span: 1
+
+  # TextBox многострочный + span=2 + привязка к строке сетки
+  - name: Notes
+    label: Заметки
+    type: string
+    control: TextBox
+    multiline: true
+    maxLength: 2000
+    placeholder: "Дополнительная информация"
+    layout:
+      span: 2
+      row: 5
+
+# ─── Действия (кнопки) ──────────────────────────────────────
+actions:
+  - name: Save
+    text: Сохранить
+    command: SaveCommand
+    isDefault: true
+    isEnabledBinding: CanSave
+    xIcon: save
+  - name: Reset
+    text: Сбросить
+    command: ResetCommand
+    xIcon: reset
+  - name: Cancel
+    text: Отмена
+    command: CancelCommand
+    isCancel: true
+    xIcon: close

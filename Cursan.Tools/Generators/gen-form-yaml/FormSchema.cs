@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Cursan.Tools.Generators;
+﻿namespace Cursan.Tools.Generators;
 
 // Корневая модель
 public sealed class FormSchema
@@ -70,7 +68,7 @@ public sealed class CodeBehindSettings
 }
 
 // Общие свойства поля
-public abstract class FieldSchema
+public class FieldSchema
 {
 	public string Name { get; set; } = string.Empty;
 	public string? Label { get; set; }

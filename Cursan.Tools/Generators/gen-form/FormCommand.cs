@@ -1,7 +1,4 @@
-﻿using Cursan.Tools.Cli;
-using Cursan.Tools.Infrastructure;
-
-namespace Cursan.Tools.Generators;
+﻿namespace Cursan.Tools.Generators;
 
 public sealed class FormCommand : ICommand
 {
