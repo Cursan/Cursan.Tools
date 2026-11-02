@@ -5,7 +5,7 @@ metadata:
   name: CustomerEditForm
   namespace: Cursan.Samples.Customers
   description: Форма редактирования клиента со всеми типами полей.
-  output: ./Generated
+  #output: ./Generated
   overwrite: true
 
 # ─── Настройки окна ─────────────────────────────────────────

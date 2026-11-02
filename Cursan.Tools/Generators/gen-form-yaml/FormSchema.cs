@@ -1,6 +1,5 @@
 ﻿namespace Cursan.Tools.Generators;
 
-// Корневая модель
 public sealed class FormSchema
 {
 	public int Version { get; set; }
@@ -67,8 +66,7 @@ public sealed class CodeBehindSettings
 	public string DataContext { get; set; } = "viewModel"; // viewModel | self | null
 }
 
-// Общие свойства поля
-public class FieldSchema
+public sealed class FieldSchema
 {
 	public string Name { get; set; } = string.Empty;
 	public string? Label { get; set; }
@@ -87,13 +85,6 @@ public class FieldSchema
 	public ValidationSchema? Validation { get; set; }
 	public FieldLayoutSchema? Layout { get; set; }
 }
-
-// Конкретные типы полей (можно использовать один класс с полиморфизмом, но для наглядности – отдельные)
-public sealed class TextBoxField : FieldSchema { }
-public sealed class NumericUpDownField : FieldSchema { }
-public sealed class DatePickerField : FieldSchema { }
-public sealed class ComboBoxField : FieldSchema { }
-public sealed class CheckBoxField : FieldSchema { }
 
 public sealed class ValidationSchema
 {

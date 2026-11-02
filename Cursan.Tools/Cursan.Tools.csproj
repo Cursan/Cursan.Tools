@@ -12,9 +12,37 @@
 	<FileVersion>1.0.1.0</FileVersion>
 	<Company>Cursan</Company>
 	<Product>Tools</Product>
-	<Version>1.0.1.1</Version>
+	<Version>1.0.3.3</Version>
+	<Title>Cursan.Tools</Title>
+	<Authors>Cursan</Authors>
+	<IncludeSymbols>True</IncludeSymbols>
+	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
-	<ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Generators\gen-form-yaml\Generated\**" />
+    <EmbeddedResource Remove="Generators\gen-form-yaml\Generated\**" />
+    <None Remove="Generators\gen-form-yaml\Generated\**" />
+  </ItemGroup>
+	  <ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.33" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.33">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.33" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.14">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="YamlDotNet" Version="13.7.1" />
 	</ItemGroup>
+	  <ItemGroup>
+	    <None Update="LICENSE.txt">
+	      <Pack>True</Pack>
+	      <PackagePath>\</PackagePath>
+	    </None>
+	  </ItemGroup>
 </Project>

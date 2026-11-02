@@ -8,3 +8,8 @@ global using Cursan.Tools.Infrastructure;
 global using Cursan.Tools.Cli;
 global using Cursan.Tools.Generators;
 global using System.Text.RegularExpressions;
+global using YamlDotNet.Serialization;
+global using YamlDotNet.Serialization.NamingConventions;
+global using Microsoft.EntityFrameworkCore.SqlServer;
+global using Microsoft.SqlServer;
+global using Microsoft.Data.SqlClient;

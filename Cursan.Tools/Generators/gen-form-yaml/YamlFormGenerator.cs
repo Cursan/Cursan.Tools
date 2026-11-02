@@ -45,14 +45,13 @@ public sealed class YamlFormGenerator
 		var sb = new StringBuilder();
 		FormSettings form = _schema.Form;
 		FormLayout layout = form.Layout;
-
+		#region Header
 		sb.AppendLine($"<{form.Type} x:Class=\"{_schema.Metadata.Namespace}.{_schema.Metadata.Name}\"");
 		sb.AppendLine("        xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"");
 		sb.AppendLine("        xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\"");
 
 		if (!string.IsNullOrWhiteSpace(form.Title))
 			sb.AppendLine($"        Title=\"{form.Title}\"");
-
 		if (form.Width != "auto")
 			sb.AppendLine($"        Width=\"{form.Width}\"");
 		if (form.Height != "auto")
@@ -65,8 +64,9 @@ public sealed class YamlFormGenerator
 			sb.AppendLine("        ResizeMode=\"NoResize\"");
 		if (form.StartupLocation != "Manual")
 			sb.AppendLine($"        WindowStartupLocation=\"{form.StartupLocation}\"");
-
 		sb.AppendLine("        >");
+		#endregion
+		#region Grid start and setting
 
 		// Сетка
 		sb.AppendLine("    <Grid>");
@@ -90,8 +90,8 @@ public sealed class YamlFormGenerator
 			sb.AppendLine($"            <RowDefinition Height=\"{layout.RowHeight}\"/>");
 		}
 		sb.AppendLine("        </Grid.RowDefinitions>");
-
-		// Размещение полей
+		#endregion
+		#region Fields
 		var rowIndex = 0;
 		var colIndex = 0;
 		foreach (FieldSchema field in _schema.Fields)
@@ -117,7 +117,7 @@ public sealed class YamlFormGenerator
 			var controlXaml = control switch
 			{
 				"TextBox" => BuildTextBox(field, placeholder),
-				"NumericUpDown" => BuildNumericUpDown(field),
+				//"NumericUpDown" => BuildNumericUpDown(field),
 				"DatePicker" => BuildDatePicker(field),
 				"ComboBox" => BuildComboBox(field),
 				"CheckBox" => BuildCheckBox(field),
@@ -126,12 +126,15 @@ public sealed class YamlFormGenerator
 
 			var controlCol = colIndex + 1;
 			var controlSpan = span;
-			sb.AppendLine($"        {controlXaml} Grid.Row=\"{rowIndex}\" Grid.Column=\"{controlCol}\" Grid.ColumnSpan=\"{controlSpan}\"");
-
+			FieldAdd();
 			rowIndex++;
-			// Простое размещение: каждое поле на новой строке, если не указано иное
+			
+			void FieldAdd()
+			{
+				sb.AppendLine($"        {controlXaml} Grid.Row=\"{rowIndex}\" Grid.Column=\"{controlCol}\" Grid.ColumnSpan=\"{controlSpan}\"/>");
+			}
 		}
-
+		
 		// Кнопки действий
 		if (_schema.Actions.Count > 0)
 		{
@@ -147,58 +150,13 @@ public sealed class YamlFormGenerator
 			}
 			sb.AppendLine("        </StackPanel>");
 		}
-
+		#endregion
+		#region Grid end
 		sb.AppendLine("    </Grid>");
 		sb.AppendLine($"</{form.Type}>");
-
+		#endregion
 		return sb.ToString();
-	}
-
-	private string BuildTextBox(FieldSchema field, string placeholder)
-	{
-		var sb = new StringBuilder();
-		sb.Append("<TextBox Text=\"{Binding " + field.Name + ", UpdateSourceTrigger=PropertyChanged}\"");
-		if (field.MaxLength > 0)
-			sb.Append($" MaxLength=\"{field.MaxLength}\"");
-		if (field.Multiline)
-			sb.Append(" AcceptsReturn=\"True\" TextWrapping=\"Wrap\"");
-		if (!string.IsNullOrWhiteSpace(placeholder) && !field.Multiline)
-			sb.Append($" ToolTip=\"{placeholder}\"");
-		sb.Append(" />");
-		return sb.ToString();
-	}
-
-	private string BuildNumericUpDown(FieldSchema field)
-	{
-		var sb = new StringBuilder();
-		sb.Append("<NumericUpDown Value=\"{Binding " + field.Name + "}\"");
-		if (field.Min.HasValue)
-			sb.Append($" Minimum=\"{field.Min}\"");
-		if (field.Max.HasValue)
-			sb.Append($" Maximum=\"{field.Max}\"");
-		sb.Append(" />");
-		return sb.ToString();
-	}
-
-	private string BuildDatePicker(FieldSchema field)
-	{
-		return "<DatePicker SelectedDate=\"{Binding " + field.Name + "}\" />";
-	}
-
-	private string BuildComboBox(FieldSchema field)
-	{
-		var sb = new StringBuilder();
-		sb.Append("<ComboBox ItemsSource=\"{Binding " + field.ItemsSource + "}\"");
-		sb.Append($" DisplayMemberPath=\"{field.DisplayMember}\"");
-		sb.Append($" SelectedValuePath=\"{field.ValueMember}\"");
-		sb.Append($" SelectedValue=\"{{Binding {field.Name}}}\"");
-		sb.Append(" />");
-		return sb.ToString();
-	}
-
-	private string BuildCheckBox(FieldSchema field)
-	{
-		return "<CheckBox IsChecked=\"{Binding " + field.Name + "}\" />";
+		
 	}
 
 	private string BuildCodeBehind()
@@ -338,5 +296,57 @@ public sealed class YamlFormGenerator
 		sb.AppendLine("}");
 
 		return sb.ToString();
+
+		
+		
 	}
+
+	#region Build Felds
+	private string BuildTextBox(FieldSchema field, string placeholder)
+	{
+		var sb = new StringBuilder();
+		sb.Append("<TextBox Text=\"{Binding " + field.Name + ", UpdateSourceTrigger=PropertyChanged}\"");
+		if (field.MaxLength > 0)
+			sb.Append($" MaxLength=\"{field.MaxLength}\"");
+		if (field.Multiline)
+			sb.Append(" AcceptsReturn=\"True\" TextWrapping=\"Wrap\"");
+		if (!string.IsNullOrWhiteSpace(placeholder) && !field.Multiline)
+			sb.Append($" ToolTip=\"{placeholder}\"");
+		//sb.Append(" />");
+		return sb.ToString();
+	}
+
+	private string BuildNumericUpDown(FieldSchema field)
+	{
+		var sb = new StringBuilder();
+		sb.Append("<NumericUpDown Value=\"{Binding " + field.Name + "}\"");
+		if (field.Min.HasValue)
+			sb.Append($" Minimum=\"{field.Min}\"");
+		if (field.Max.HasValue)
+			sb.Append($" Maximum=\"{field.Max}\"");
+		//sb.Append(" />");
+		return sb.ToString();
+	}
+
+	private string BuildDatePicker(FieldSchema field)
+	{
+		return "<DatePicker SelectedDate=\"{Binding " + field.Name + "}\" />";
+	}
+
+	private string BuildComboBox(FieldSchema field)
+	{
+		var sb = new StringBuilder();
+		sb.Append("<ComboBox ItemsSource=\"{Binding " + field.ItemsSource + "}\"");
+		sb.Append($" DisplayMemberPath=\"{field.DisplayMember}\"");
+		sb.Append($" SelectedValuePath=\"{field.ValueMember}\"");
+		sb.Append($" SelectedValue=\"{{Binding {field.Name}}}\"");
+		//sb.Append(" />");
+		return sb.ToString();
+	}
+
+	private string BuildCheckBox(FieldSchema field)
+	{
+		return "<CheckBox IsChecked=\"{Binding " + field.Name + "}\"";
+	}
+	#endregion
 }
