@@ -1,48 +1,47 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-	<OutputType>Exe</OutputType>
-	<PackAsTool>true</PackAsTool>
-	<ToolCommandName>cursan</ToolCommandName>
-	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-	<AssemblyVersion>1.0.1.0</AssemblyVersion>
-	<FileVersion>1.0.1.0</FileVersion>
-	<Company>Cursan</Company>
-	<Product>Tools</Product>
-	<Version>1.0.3.3</Version>
-	<Title>Cursan.Tools</Title>
-	<Authors>Cursan</Authors>
-	<IncludeSymbols>True</IncludeSymbols>
-	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-	<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Generators\gen-form-yaml\Generated\**" />
-    <EmbeddedResource Remove="Generators\gen-form-yaml\Generated\**" />
-    <None Remove="Generators\gen-form-yaml\Generated\**" />
-  </ItemGroup>
-	  <ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<OutputType>Exe</OutputType>
+		<PackAsTool>true</PackAsTool>
+		<ToolCommandName>cursan</ToolCommandName>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<AssemblyVersion>1.0.1.0</AssemblyVersion>
+		<FileVersion>1.0.1.0</FileVersion>
+		<Company>Cursan</Company>
+		<Product>Tools</Product>
+		<Version>1.0.4.0</Version>
+		<Authors>Cursan</Authors>
+		<Title>Cursan.Tools</Title>
+		<PackageId>Cursan.Tools</PackageId>
+		<IncludeSymbols>True</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<Description>Набор утилит для генерации кода в .NET.</Description>
+		<PackageTags>cursan;codegen;scaffolding;wpf;efcore</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<RepositoryUrl>https://github.com/Cursan/Cursan.Tools</RepositoryUrl>
+	</PropertyGroup>
+	
+	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.33" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.33">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.33" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.14">
+			<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.33" />
+			<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.14">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="YamlDotNet" Version="13.7.1" />
 	</ItemGroup>
-	  <ItemGroup>
-	    <None Update="LICENSE.txt">
-	      <Pack>True</Pack>
-	      <PackagePath>\</PackagePath>
-	    </None>
-	  </ItemGroup>
+	<ItemGroup>
+		<None Update="LICENSE.txt">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 </Project>
