@@ -6,6 +6,29 @@ public sealed class SqlServerSchemaReader
 
 	public SqlServerSchemaReader(string connectionString) => _connectionString = connectionString;
 
+	/// <summary>
+	/// Возвращает список всех пользовательских таблиц указанной схемы.
+	/// </summary>
+	public IReadOnlyList<string> GetTableNames(string schema)
+	{
+		using var conn = new SqlConnection(_connectionString);
+		conn.Open();
+		using var cmd = conn.CreateCommand();
+		cmd.CommandText = @"
+            SELECT t.name
+            FROM sys.tables t
+            JOIN sys.schemas s ON t.schema_id = s.schema_id
+            WHERE s.name = @schema
+            ORDER BY t.name";
+		cmd.Parameters.AddWithValue("@schema", schema);
+
+		var result = new List<string>();
+		using var r = cmd.ExecuteReader();
+		while (r.Read())
+			result.Add(r.GetString(0));
+		return result;
+	}
+
 	public SqlTableSchema ReadTable(string schema, string table)
 	{
 		using var conn = new SqlConnection(_connectionString);

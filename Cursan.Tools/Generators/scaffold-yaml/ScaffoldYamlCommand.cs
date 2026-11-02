@@ -8,8 +8,7 @@ public sealed class ScaffoldYamlCommand : ICommand
 		"Создаёт YAML-схему формы (cursan.dev/form-v1) по структуре таблицы SQL Server.";
 
 	public string Usage =>
-		"cursan scaffold-yaml --connection <строка> [--table <Таблица>] [--schema dbo] " +
-		"[--form-name <Класс>] [--namespace <Ns>] [--output <каталог>] [--force]";
+		"cursan scaffold-yaml --connection <строка> [--table <Таблица|all>] [--schema dbo] [--form-name <Класс>] [--namespace <Ns>] [--output <каталог>] [--force]";
 
 	public int Execute(CommandContext context)
 	{
@@ -24,22 +23,49 @@ public sealed class ScaffoldYamlCommand : ICommand
 			var force = context.GetFlag("force");
 
 			var reader = new SqlServerSchemaReader(connStr);
-			var table = reader.ReadTable(dbSchema, tableName);
 
-			var options = new ScaffoldOptions
+			if (tableName.Equals("all", StringComparison.OrdinalIgnoreCase))
 			{
-				FormName = string.IsNullOrWhiteSpace(formName) ? null : formName,
-				Namespace = string.IsNullOrWhiteSpace(ns) ? null : ns,
-				Output = output,
-			};
+				var tables = reader.GetTableNames(dbSchema);
+				if (tables.Count == 0)
+				{
+					context.Out.WriteLine($"В схеме [{dbSchema}] не найдено таблиц.");
+					return 0;
+				}
 
-			var schema = new SqlToFormMapper(reader, options).Map(table);
-			var yaml = new FormSchemaYamlWriter().Write(schema);
+				foreach (var name in tables)
+				{
+					var table = reader.ReadTable(dbSchema, name);
+					var options = new ScaffoldOptions
+					{
+						FormName = string.IsNullOrWhiteSpace(formName) ? null : formName,
+						Namespace = string.IsNullOrWhiteSpace(ns) ? null : ns,
+						Output = output,
+					};
+					var schemaModel = new SqlToFormMapper(reader, options).Map(table);
+					var yaml = new FormSchemaYamlWriter().Write(schemaModel);
 
-			var fileName = $"{tableName}.form.yaml";
-			var path = CodeFileWriter.Write(output, fileName, yaml, force);
+					var fileName = $"{name}.form.yaml";
+					var path = CodeFileWriter.Write(output, fileName, yaml, force);
+					context.Out.WriteLine($"Создан файл: {path}");
+				}
+			}
+			else
+			{
+				var table = reader.ReadTable(dbSchema, tableName);
+				var options = new ScaffoldOptions
+				{
+					FormName = string.IsNullOrWhiteSpace(formName) ? null : formName,
+					Namespace = string.IsNullOrWhiteSpace(ns) ? null : ns,
+					Output = output,
+				};
+				var schemaModel = new SqlToFormMapper(reader, options).Map(table);
+				var yaml = new FormSchemaYamlWriter().Write(schemaModel);
 
-			context.Out.WriteLine($"Создан файл: {path}");
+				var fileName = $"{tableName}.form.yaml";
+				var path = CodeFileWriter.Write(output, fileName, yaml, force);
+				context.Out.WriteLine($"Создан файл: {path}");
+			}
 			return 0;
 		}
 		catch (Exception ex)
