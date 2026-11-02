@@ -19,10 +19,13 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '8.0.0'
+
+      - name: Build
+        run: dotnet build Cursan.Tools/Cursan.Tools.csproj -c Release
 
       - name: Pack
-        run: dotnet pack Cursan.Tools/Cursan.Tools.csproj -c Release -o ./artifacts
+        run: dotnet pack Cursan.Tools/Cursan.Tools.csproj -c Release --no-build -o ./artifacts
 
       - name: NuGet login (OIDC)
         uses: NuGet/login@v1
