@@ -8,7 +8,7 @@ public sealed class ScaffoldYamlCommand : ICommand
 		"Создаёт YAML-схему формы (cursan.dev/form-v1) по структуре таблицы SQL Server.";
 
 	public string Usage =>
-		"cursan scaffold-yaml --connection <строка> --table <Таблица> [--schema dbo] " +
+		"cursan scaffold-yaml --connection <строка> [--table <Таблица>] [--schema dbo] " +
 		"[--form-name <Класс>] [--namespace <Ns>] [--output <каталог>] [--force]";
 
 	public int Execute(CommandContext context)
@@ -16,7 +16,7 @@ public sealed class ScaffoldYamlCommand : ICommand
 		try
 		{
 			var connStr = context.RequireOption("connection");
-			var tableName = context.RequireOption("table");
+			var tableName = context.GetOption("table", "all");
 			var dbSchema = context.GetOption("schema", "dbo");
 			var formName = context.GetOption("form-name", string.Empty);
 			var ns = context.GetOption("namespace", string.Empty);
